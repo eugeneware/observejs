@@ -70,6 +70,19 @@ var arrayFns = {
         { type: 'put', key: path.concat(String(i)), value: clone(value) });
     }
     return ret;
+  },
+  unshift: function (args, path, watched, s) {
+    var oldLength = this.length;
+    unobserve(this);
+    var ret = Array.prototype.unshift.apply(this, args);
+    for (var i = 0; i < ret; i++) {
+      var idx = String(i);
+      var value = this[i];
+      s.queue({ type: 'put', key: path.concat(idx), value: clone(value) });
+    }
+    observe(this, s, path);
+
+    return ret;
   }
 };
 

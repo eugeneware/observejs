@@ -62,7 +62,16 @@ describe('observejs', function () {
       { type: 'del', key: [ 'tags', '1' ] },
       { type: 'put', key: [ 'tags', '1' ], value: 'tagb' },
       { type: 'put', key: [ 'tags', '2' ], value: 'tagc' },
-      { type: 'put', key: [ 'tags', '3' ], value: 'tagd' }
+      { type: 'put', key: [ 'tags', '3' ], value: 'tagd' },
+
+      // unshift
+      { type: 'put', key: [ 'tags', '0' ], value: 'x' },
+      { type: 'put', key: [ 'tags', '1' ], value: 'y' },
+      { type: 'put', key: [ 'tags', '2' ], value: 'z' },
+      { type: 'put', key: [ 'tags', '3' ], value: 'tag1' },
+      { type: 'put', key: [ 'tags', '4' ], value: 'tagb' },
+      { type: 'put', key: [ 'tags', '5' ], value: 'tagc' },
+      { type: 'put', key: [ 'tags', '6' ], value: 'tagd' }
 
       ];
     var received = 0;
@@ -96,6 +105,10 @@ describe('observejs', function () {
 
     o.tags.splice(1, 0, 'tagb', 'tagc', 'tagd');
     expect(o.tags).to.deep.equal(['tag1', 'tagb', 'tagc', 'tagd']);
+
+    o.tags.unshift('x', 'y', 'z');
+    expect(o.tags).to.deep.equal(
+      ['x', 'y', 'z', 'tag1', 'tagb', 'tagc', 'tagd']);
 
     watcher.on('end', function () {
       done();
