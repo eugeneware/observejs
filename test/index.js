@@ -1,7 +1,12 @@
 var expect = require('chai').expect
   , observejs = require('..')
   , observe = observejs.observe
-  , unobserve = observejs.unobserve;
+  , unobserve = observejs.unobserve
+  , changes = observejs.changes;
+
+function clone(o) {
+  return JSON.parse(JSON.stringify(o));
+}
 
 describe('observejs', function () {
   it('should be able to wrap an object', function (done) {
@@ -21,7 +26,6 @@ describe('observejs', function () {
       ]
     };
 
-    var watcher = observe(o);
     var expected = [
       { type: 'put', key: ['name'], value: 'Susan' },
       { type: 'put', key: ['number'], value: 43 },
@@ -74,10 +78,18 @@ describe('observejs', function () {
       { type: 'put', key: [ 'tags', '6' ], value: 'tagd' }
 
       ];
+
+    var o2 = clone(o);
+    var watcher = observe(o);
+    watcher.pipe(changes(o2));
+
     var received = 0;
     watcher.on('data', function (data) {
       //console.log(data);
       expect(data).to.deep.equal(expected[received++]);
+    });
+    watcher.on('end', function () {
+      done();
     });
 
     o.name = 'Susan';
@@ -110,9 +122,8 @@ describe('observejs', function () {
     expect(o.tags).to.deep.equal(
       ['x', 'y', 'z', 'tag1', 'tagb', 'tagc', 'tagd']);
 
-    watcher.on('end', function () {
-      done();
-    });
     unobserve(o);
+
+    expect(o2).to.deep.equal(o);
   });
 });

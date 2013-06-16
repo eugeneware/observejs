@@ -20,7 +20,7 @@ var arrayFns = {
     args.forEach(function (arg, i) {
       var idx = String(len + i);
       watchProp(self, idx, path, watched, s);
-      var evt = { type: 'put', key: path.concat(idx), value: arg };
+      var evt = { type: 'put', key: path.concat(idx), value: clone(arg) };
       s.queue(evt);
     });
     return ret;
@@ -137,7 +137,12 @@ function watchProp(o, prop, path, watched, s) {
       var type = (value === undefined) ? 'del' : 'put';
       watched[prop] = value;
       var evt = { type: type, key: path.concat(prop) };
-      if (type === 'put') evt.value = value;
+      if (type === 'put') {
+        evt.value = value;
+      } else {
+        delete watched[prop];
+        delete o[prop];
+      }
       s.queue(evt);
     },
     enumerable: true,
@@ -200,4 +205,14 @@ function unobserve(o) {
 
     if (path.length === 0) s.emit('end');
   }
+}
+
+exports.changes = changeStream;
+function changeStream(dest) {
+  function write(changes) {
+    if (!Array.isArray(changes)) changes = [changes];
+    diff.apply(changes, dest, true);
+    this.queue(dest);
+  }
+  return through(write);
 }
