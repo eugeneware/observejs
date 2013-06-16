@@ -94,9 +94,7 @@ describe('observejs', function () {
     o.tags.splice(1, 1);
     expect(o.tags).to.deep.equal(['tag1']);
 
-    console.log('b4', o.tags);
     o.tags.splice(1, 0, 'tagb', 'tagc', 'tagd');
-    console.log('after', o.tags, JSON.stringify(o.tags));
     expect(o.tags).to.deep.equal(['tag1', 'tagb', 'tagc', 'tagd']);
 
     watcher.on('end', function () {
