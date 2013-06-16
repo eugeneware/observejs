@@ -33,13 +33,21 @@ describe('observejs', function () {
           model: 'M3'
         }
       },
+
+      // push
       { type: 'put', key: [ 'cars', '2', 'make' ], value: 'Mazda' },
+
+      // pop
       { type: 'del', key: [ 'cars', '2' ], value:
         {
           make: 'Mazda',
           model: 'M3'
         }
-      }
+      },
+
+      // reverse
+      { type: 'put', key: [ 'tags', '0' ], value: 'tag3' },
+      { type: 'put', key: [ 'tags', '2' ], value: 'tag1' }
       ];
     var received = 0;
     watcher.on('data', function (data) {
@@ -59,6 +67,8 @@ describe('observejs', function () {
     o.cars[2].make = 'Mazda';
     var car = o.cars.pop();
 
+    o.tags.reverse();
+    expect(o.tags).to.deep.equal(['tag3', 'tag2', 'tag1']);
     unobserve(o);
   });
 });
