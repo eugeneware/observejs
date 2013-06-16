@@ -52,6 +52,10 @@ describe('observejs', function () {
       // shift
       { type: 'del', key: [ 'tags', '2' ], value: 'tag3' },
       { type: 'put', key: [ 'tags', '0' ], value: 'tag2' },
+      { type: 'put', key: [ 'tags', '1' ], value: 'tag1' },
+
+      // sort
+      { type: 'put', key: [ 'tags', '0' ], value: 'tag2' },
       { type: 'put', key: [ 'tags', '1' ], value: 'tag1' }
 
       ];
@@ -77,6 +81,9 @@ describe('observejs', function () {
 
     var tag = o.tags.shift();
     expect(tag).to.equal('tag3');
+
+    o.tags.sort();
+    expect(o.tags).to.deep.equal(['tag1', 'tag2']);
 
     watcher.on('end', function () {
       done();
