@@ -31,9 +31,29 @@ var arrayFns = {
     var self = this;
     Object.keys(this).forEach(function (idx) {
       var value =self[idx];
+      watchProp(self, idx, path.concat(idx), watched, s);
       s.queue(
         { type: 'put', key: path.concat(String(idx)), value: clone(value) });
     });
+    return ret;
+  },
+  splice: function (args, path, watched, s) {
+    // array.splice(index , howMany[, element1[, ...[, elementN]]])
+    var i;
+    var index = args[0]
+      , howMany = args[1]
+      , elCount = args.length - 2;
+    var ret = Array.prototype.splice.apply(this, args);
+    for (i = index; i < index + howMany; i++) {
+      s.queue({ type: 'del', key: path.concat(String(i)) });
+    }
+    for (i = index; i < index + elCount; i++) {
+      var value = this[i];
+      var idx = String(i);
+      watchProp(this, idx, path.concat(idx), watched, s);
+      s.queue(
+        { type: 'put', key: path.concat(String(i)), value: clone(value) });
+    }
     return ret;
   }
 };
