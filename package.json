@@ -1,7 +1,7 @@
 {
   "name": "observejs",
-  "version": "0.0.0",
-  "description": "Watch object for changes",
+  "version": "0.0.1",
+  "description": "Watch a Javascript object for changes and stream changes to another object",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
@@ -19,9 +19,11 @@
   ],
   "author": "Eugene Ware <eugene@noblesamurai.com>",
   "license": "BSD",
-  "dependencies": {
+  "devDependencies": {
     "chai": "~1.6.1",
-    "mocha": "~1.11.0",
+    "mocha": "~1.11.0"
+  },
+  "dependencies": {
     "through": "~2.3.4",
     "changeset": "0.0.5"
   }
