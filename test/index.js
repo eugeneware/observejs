@@ -76,6 +76,7 @@ describe('observejs', function () {
     expect(o.tags).to.deep.equal(['tag3', 'tag2', 'tag1']);
 
     var tag = o.tags.shift();
+    expect(tag).to.equal('tag3');
 
     watcher.on('end', function () {
       done();
