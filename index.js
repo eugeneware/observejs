@@ -134,5 +134,7 @@ function unobserve(o) {
     });
 
     delete o._watching;
+
+    if (path.length === 0) s.emit('end');
   }
 }

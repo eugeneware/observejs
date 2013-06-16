@@ -53,7 +53,6 @@ describe('observejs', function () {
     watcher.on('data', function (data) {
       //console.log(data);
       expect(data).to.deep.equal(expected[received++]);
-      if (received === expected.length) done();
     });
 
     o.name = 'Susan';
@@ -69,6 +68,10 @@ describe('observejs', function () {
 
     o.tags.reverse();
     expect(o.tags).to.deep.equal(['tag3', 'tag2', 'tag1']);
+
+    watcher.on('end', function () {
+      done();
+    });
     unobserve(o);
   });
 });
