@@ -1,5 +1,7 @@
 var expect = require('chai').expect
-  , observe = require('..');
+  , observejs = require('..')
+  , observe = observejs.observe
+  , unobserve = observejs.unobserve;
 
 describe('observejs', function () {
   it('should be able to wrap an object', function (done) {
@@ -56,5 +58,7 @@ describe('observejs', function () {
     });
     o.cars[2].make = 'Mazda';
     var car = o.cars.pop();
+
+    unobserve(o);
   });
 });
