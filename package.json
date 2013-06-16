@@ -15,7 +15,9 @@
     "object",
     "observe",
     "watch",
-    "json"
+    "json",
+    "levelup",
+    "leveldb"
   ],
   "author": "Eugene Ware <eugene@noblesamurai.com>",
   "license": "BSD",
