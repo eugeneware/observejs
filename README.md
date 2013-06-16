@@ -38,7 +38,7 @@ var o2 = JSON.parse(JSON.stringify(o));
 
 // Replicate any changes to o2
 observejs.observe(o)
-  .pipe(changes(o2));
+  .pipe(observejs.changes(o2));
 
 // Make some changes to the source object
 o.name = 'Susan';
