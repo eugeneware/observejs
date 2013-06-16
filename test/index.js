@@ -1,5 +1,5 @@
 var expect = require('chai').expect
-  , through = require('through');
+  , observe = require('..');
 
 function clone(o) {
   return JSON.parse(JSON.stringify(o));
