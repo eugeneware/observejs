@@ -1,0 +1,27 @@
+{
+  "name": "observejs",
+  "version": "0.0.0",
+  "description": "Watch object for changes",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eugeneware/observejs"
+  },
+  "keywords": [
+    "Object.observe",
+    "object",
+    "observe",
+    "watch",
+    "json"
+  ],
+  "author": "Eugene Ware <eugene@noblesamurai.com>",
+  "license": "BSD",
+  "dependencies": {
+    "chai": "~1.6.1",
+    "mocha": "~1.11.0",
+    "through": "~2.3.4"
+  }
+}
