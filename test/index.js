@@ -55,14 +55,20 @@ describe('observejs', function () {
       { type: 'put', key: [ 'tags', '1' ], value: 'tag1' },
 
       // sort
-      { type: 'put', key: [ 'tags', '0' ], value: 'tag2' },
-      { type: 'put', key: [ 'tags', '1' ], value: 'tag1' }
+      { type: 'put', key: [ 'tags', '0' ], value: 'tag1' },
+      { type: 'put', key: [ 'tags', '1' ], value: 'tag2' },
+
+      // splice
+      { type: 'del', key: [ 'tags', '1' ] },
+      { type: 'put', key: [ 'tags', '1' ], value: 'tagb' },
+      { type: 'put', key: [ 'tags', '2' ], value: 'tagc' },
+      { type: 'put', key: [ 'tags', '3' ], value: 'tagd' }
 
       ];
     var received = 0;
     watcher.on('data', function (data) {
       //console.log(data);
-      //expect(data).to.deep.equal(expected[received++]);
+      expect(data).to.deep.equal(expected[received++]);
     });
 
     o.name = 'Susan';

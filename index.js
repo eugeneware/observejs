@@ -1,4 +1,5 @@
-var through = require('through');
+var through = require('through')
+  , diff = require('changeset');
 
 function clone(o) {
   return JSON.parse(JSON.stringify(o));
@@ -37,6 +38,20 @@ var arrayFns = {
     });
     return ret;
   },
+  sort: function (args, path, watched, s) {
+    var i;
+    unobserve(this);
+    var old = clone(this);
+    var ret = Array.prototype.sort.apply(this, args);
+    var changes = diff(old, ret);
+    var self = this;
+    changes.forEach(function (change) {
+      change.key = path.concat(change.key);
+      s.queue(change);
+    });
+    observe(this, s, path);
+    return ret;
+  },
   splice: function (args, path, watched, s) {
     // array.splice(index , howMany[, element1[, ...[, elementN]]])
     var i;
@@ -65,6 +80,7 @@ function patchArray(o, path, watched, s) {
     arrayMethods.forEach(function (fn) {
       var _fn = o[fn];
       Object.defineProperty(o, fn, {
+        configurable: true,
         enumerable: false,
         get: function () {
           return function () {
@@ -88,7 +104,8 @@ function patchArray(o, path, watched, s) {
         delete o._unpatch;
       };
     },
-    enumerable: false
+    enumerable: false,
+    configurable: true
   });
 }
 
@@ -110,7 +127,8 @@ function watchProp(o, prop, path, watched, s) {
       if (type === 'put') evt.value = value;
       s.queue(evt);
     },
-    enumerable: true
+    enumerable: true,
+    configurable: true
   });
 }
 
@@ -133,6 +151,7 @@ function observe(o, s, path) {
   });
 
   Object.defineProperty(o, '_watching', {
+    configurable: true,
     get: function () {
       return {
         watched: watched,
