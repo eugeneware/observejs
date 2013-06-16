@@ -1,7 +1,18 @@
 var expect = require('chai').expect
   , through = require('through');
 
+function clone(o) {
+  return JSON.parse(JSON.stringify(o));
+}
+
 var arrayFns = {
+  pop: function (args, path, watched, s) {
+    var idx = String(this.length - 1);
+    var ret = Array.prototype.pop.apply(this, args);
+    var evt = { type: 'del', key: path.concat(idx), value: clone(ret) };
+    s.queue(evt);
+    return ret;
+  },
   push: function (args, path, watched, s) {
     var len = this.length;
     var ret = Array.prototype.push.apply(this, args);
@@ -120,10 +131,17 @@ describe('observejs', function () {
           model: 'M3'
         }
       },
-      { type: 'put', key: [ 'cars', '2', 'make' ], value: 'Mazda' }
+      { type: 'put', key: [ 'cars', '2', 'make' ], value: 'Mazda' },
+      { type: 'del', key: [ 'cars', '2' ], value:
+        {
+          make: 'Mazda',
+          model: 'M3'
+        }
+      }
       ];
     var received = 0;
     watcher.on('data', function (data) {
+      //console.log(data);
       expect(data).to.deep.equal(expected[received++]);
       if (received === expected.length) done();
     });
@@ -137,5 +155,6 @@ describe('observejs', function () {
       model: 'M3'
     });
     o.cars[2].make = 'Mazda';
+    var car = o.cars.pop();
   });
 });
