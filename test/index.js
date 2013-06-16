@@ -47,7 +47,13 @@ describe('observejs', function () {
 
       // reverse
       { type: 'put', key: [ 'tags', '0' ], value: 'tag3' },
-      { type: 'put', key: [ 'tags', '2' ], value: 'tag1' }
+      { type: 'put', key: [ 'tags', '2' ], value: 'tag1' },
+
+      // shift
+      { type: 'del', key: [ 'tags', '2' ], value: 'tag3' },
+      { type: 'put', key: [ 'tags', '0' ], value: 'tag2' },
+      { type: 'put', key: [ 'tags', '1' ], value: 'tag1' }
+
       ];
     var received = 0;
     watcher.on('data', function (data) {
@@ -68,6 +74,8 @@ describe('observejs', function () {
 
     o.tags.reverse();
     expect(o.tags).to.deep.equal(['tag3', 'tag2', 'tag1']);
+
+    var tag = o.tags.shift();
 
     watcher.on('end', function () {
       done();

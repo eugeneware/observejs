@@ -23,6 +23,18 @@ var arrayFns = {
       s.queue(evt);
     });
     return ret;
+  },
+  shift: function (args, path, watched, s) {
+    var idx = String(this.length - 1);
+    var ret = Array.prototype.shift.apply(this, args);
+    s.queue({ type: 'del', key: path.concat(idx), value: ret });
+    var self = this;
+    Object.keys(this).forEach(function (idx) {
+      var value =self[idx];
+      s.queue(
+        { type: 'put', key: path.concat(String(idx)), value: clone(value) });
+    });
+    return ret;
   }
 };
 
@@ -78,8 +90,7 @@ function watchProp(o, prop, path, watched, s) {
       if (type === 'put') evt.value = value;
       s.queue(evt);
     },
-    enumerable: true,
-    configurable: true
+    enumerable: true
   });
 }
 
